@@ -67,18 +67,20 @@ module EventCalendarRails
                start_time.to_i,
                end_time.to_i]
 
-          if ev=events.find{|i| i[0..2]==ar}
+          if events
+            if ev=events.find{|i| i[0..2]==ar}
 
-            if display_mode ==:admin || now + 1.hour < start_time
-              content_tag(:div, ev.last, :class =>"livre label label-success verde",
-                          :data=> {
-                                    :date=>ar,
-                                    :day=>I18n.localize(cur_date,:format=>"%A, %d de %B de %Y"),
-                                    :start_time=>start_time.strftime("%H:%M"),
-                                    :end_time=>end_time.strftime("%H:%M")
-                          }, :style=>"width:95%;" )
-            else
-              content_tag(:div, "Indisponível" , :class =>"label", :style=>"width:95%;" )
+              if display_mode ==:admin || now + 1.hour < start_time
+                content_tag(:div, ev.last, :class =>"livre label label-success verde",
+                            :data=> {
+                                      :date=>ar,
+                                      :day=>I18n.localize(cur_date,:format=>"%A, %d de %B de %Y"),
+                                      :start_time=>start_time.strftime("%H:%M"),
+                                      :end_time=>end_time.strftime("%H:%M")
+                            }, :style=>"width:95%;" )
+              else
+                content_tag(:div, "Indisponível" , :class =>"label", :style=>"width:95%;" )
+              end
             end
           end
         end
