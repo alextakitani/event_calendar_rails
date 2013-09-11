@@ -1,3 +1,5 @@
+require 'pry'
+require 'rails'
 module EventCalendarRails
 
    module ViewHelpers
@@ -15,8 +17,7 @@ module EventCalendarRails
       end
 
       class Calendar < Struct.new(:view, :date, :events, :mode, :start_time, :end_time, :interval, :display_mode, :callback)
-        HEADER = I18n.t 'date.day_names'
-        binding.pry
+
         START_DAY = :sunday
 
         delegate :content_tag, to: :view
@@ -58,8 +59,6 @@ module EventCalendarRails
 
         def action_div(date,start,endt)
           cur_date = DateTime.parse(date.to_s + " 00:00:00 -0300")
-
-          #binding.pry if cur_date == DateTime.parse(Date.today.to_s + " 00:00:00")
           start_time = DateTime.parse(date.to_s + " " + Time.at(start).strftime("%H:%M") + "-0300")
           end_time = DateTime.parse(date.to_s + " " + Time.at(endt).strftime("%H:%M") + "-0300")
           now = DateTime.parse DateTime.now.strftime("%Y-%m-%d %H:%M -0300")
@@ -104,7 +103,7 @@ module EventCalendarRails
         def header
           content_tag :tr do
             content_tag(:th,'',:style=>"width:12.5%") +
-            HEADER.map { |day| content_tag :th, day,:style=>"width:12.5%" }.join.html_safe
+            I18n.t('date.day_names').map { |day| content_tag :th, day,:style=>"width:12.5%" }.join.html_safe
           end
         end
 
