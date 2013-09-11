@@ -15,7 +15,7 @@ module EventCalendarRails
       end
 
       class Calendar < Struct.new(:view, :date, :events, :mode, :start_time, :end_time, :interval, :display_mode, :callback)
-        HEADER = %w[Domingo Segunda Terça Quarta Quinta Sexta Sábado]
+        HEADER = Date::DAYNAMES
         START_DAY = :sunday
 
         delegate :content_tag, to: :view
