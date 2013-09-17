@@ -42,7 +42,8 @@ module EventCalendarRails
 
         def time_rows
           return if mode == "month"
-          (start_time.to_i..end_time.to_i).step(interval.minutes).map do |h|
+          binding.pry
+          (start_time.to_i..end_time.to_i).step(interval.minutes).each do |h|
             content_tag(:tr, :class=>h) do
               8.times.map do |i|
                 content_tag :td do
