@@ -1,4 +1,3 @@
-require 'pry'
 require 'rails'
 module EventCalendarRails
 
@@ -17,7 +16,7 @@ module EventCalendarRails
       end
 
       class Calendar < Struct.new(:view, :date, :events, :mode, :start_time, :end_time, :interval, :display_mode, :callback)
-
+        HEADER = %w[Domingo Segunda Terça Quarta Quinta Sexta Sábado]
         START_DAY = :sunday
 
         delegate :content_tag, to: :view
@@ -42,8 +41,7 @@ module EventCalendarRails
 
         def time_rows
           return if mode == "month"
-          binding.pry
-          (start_time.to_i..end_time.to_i).step(interval.minutes).each do |h|
+          (start_time.to_i..end_time.to_i).step(interval).map do |h|
             content_tag(:tr, :class=>h) do
               8.times.map do |i|
                 content_tag :td do
@@ -60,6 +58,7 @@ module EventCalendarRails
 
         def action_div(date,start,endt)
           cur_date = DateTime.parse(date.to_s + " 00:00:00 -0300")
+          #binding.pry if cur_date == DateTime.parse(Date.today.to_s + " 00:00:00")
           start_time = DateTime.parse(date.to_s + " " + Time.at(start).strftime("%H:%M") + "-0300")
           end_time = DateTime.parse(date.to_s + " " + Time.at(endt).strftime("%H:%M") + "-0300")
           now = DateTime.parse DateTime.now.strftime("%Y-%m-%d %H:%M -0300")
@@ -68,7 +67,8 @@ module EventCalendarRails
                start_time.to_i,
                end_time.to_i]
 
-          if events
+          #binding.pry
+          unless events.nil?
             if ev=events.find{|i| i[0..2]==ar}
 
               if display_mode ==:admin || now + 1.hour < start_time
@@ -102,9 +102,10 @@ module EventCalendarRails
         end
 
         def header
+          #binding.pry
           content_tag :tr do
             content_tag(:th,'',:style=>"width:12.5%") +
-            I18n.t('date.day_names').map { |day| content_tag :th, day,:style=>"width:12.5%" }.join.html_safe
+            HEADER.map { |day| content_tag :th, day,:style=>"width:12.5%" }.join.html_safe
           end
         end
 
@@ -129,15 +130,18 @@ module EventCalendarRails
         end
 
         def weeks
+
           if mode == "month"
-            first = date.beginning_of_month.beginning_of_week(START_DAY)
-            last = date.end_of_month.end_of_week(START_DAY)
+            first = date.to_date.beginning_of_month.beginning_of_week(START_DAY)
+            last = date.to_date.end_of_month.end_of_week(START_DAY)
           elsif mode == "week"
-            first = date.beginning_of_week(START_DAY)
-            last = date.end_of_week(START_DAY)
+            first = date.to_date.beginning_of_week(START_DAY)
+            last = date.to_date.end_of_week(START_DAY)
           end
           (first..last).to_a.in_groups_of(7)
+          #(first.to_i..last.to_i).step(1.day).map{|d| Date.parse(Time.at(d).to_s) }.in_groups_of(7)
         end
       end
+
   end
 end
