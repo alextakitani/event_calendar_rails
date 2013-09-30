@@ -7,15 +7,15 @@ module EventCalendarRails
         Calendar.new(self, date, events, "month", block, nil , nil , nil).table
       end
 
-      def week_calendar(date = Date.today, events=nil, start_time = Time.parse("08:00"), end_time = Time.parse("19:30"), interval=30.minutes, display_mode=:regular, &block)
-        Calendar.new(self, date, events, "week", start_time, end_time, interval,display_mode, block ).table
+      def week_calendar(date = Date.today, events=nil, start_time = Time.parse("08:00"), end_time = Time.parse("19:30"), interval=30.minutes, precedence=1.hour, display_mode=:regular, &block)
+        Calendar.new(self, date, events, "week", start_time, end_time, interval, precedence, display_mode, block ).table
       end
 
-      def week_calendar_admin(date = Date.today, events=nil, start_time = Time.parse("08:00"), end_time = Time.parse("19:30"), interval=30.minutes, display_mode=:admin, &block)
-        Calendar.new(self, date, events, "week", start_time, end_time, interval,display_mode, block ).table
+      def week_calendar_admin(date = Date.today, events=nil, start_time = Time.parse("08:00"), end_time = Time.parse("19:30"), interval=30.minutes, precedence=1.hour, display_mode=:admin, &block)
+        Calendar.new(self, date, events, "week", start_time, end_time, interval, precedence, display_mode, block ).table
       end
 
-      class Calendar < Struct.new(:view, :date, :events, :mode, :start_time, :end_time, :interval, :display_mode, :callback)
+      class Calendar < Struct.new(:view, :date, :events, :mode, :start_time, :end_time, :interval, :precedence, :display_mode, :callback)
         HEADER = %w[Domingo Segunda Terça Quarta Quinta Sexta Sábado]
         START_DAY = :sunday
 
@@ -71,7 +71,7 @@ module EventCalendarRails
           unless events.nil?
             if ev=events.find{|i| i[0..2]==ar}
 
-              if display_mode ==:admin || now + 1.hour < start_time
+              if display_mode ==:admin || now + precedence < start_time
                 content_tag(:div, ev.last, :class =>"livre label label-success verde",
                             :data=> {
                                       :date=>ar,
