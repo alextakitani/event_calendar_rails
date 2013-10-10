@@ -4,7 +4,7 @@ module EventCalendarRails
    module ViewHelpers
 
       def month_calendar(date = Date.today, events=nil, &block)
-        Calendar.new(self, date, events, "month", nil, nil, nil, nil , nil , display_mode=:regular, block).table
+        Calendar.new(self, date, events, "month", nil, nil, nil, nil , display_mode=:regular, block).table
       end
 
       def week_calendar(date = Date.today, events=nil, start_time = Time.parse("08:00"), end_time = Time.parse("19:30"), interval=30.minutes, precedence=1.hour, display_mode=:regular, &block)
