@@ -75,7 +75,7 @@ module EventCalendarRails
         def full_action_div(date)
 
           unless events.nil?
-            events.find_all{|e| e[0]==date.to_time.beginning_of_day.to_i}.map do |ev|
+            events.find_all{|e| e[0]==Time.zone.parse(date.to_s).to_i}.map do |ev|
                 content_tag(:div, "", :class =>"event",
                             :data=> ev.last, :style=>"width:95%;" )
             end.join.html_safe
