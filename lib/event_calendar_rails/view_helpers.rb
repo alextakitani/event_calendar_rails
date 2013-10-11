@@ -51,7 +51,7 @@ module EventCalendarRails
             content_tag(:tr, :class=>'full_row') do
                 7.times.map do |i|
                   content_tag :td do
-                      full_action_div(weeks[0][i-1])
+                      full_action_div(weeks[0][i])
                   end
                 end.join.html_safe
               end
@@ -61,7 +61,7 @@ module EventCalendarRails
                 8.times.map do |i|
                   content_tag :td do
                     if i == 0
-                      I18n.localize(Time.at(h),:format=>"%H:%M")
+                      I18n.localize(Time.zone.at(h),:format=>"%H:%M")
                     else
                       action_div(weeks[0][i-1],h,h+interval)
                     end
@@ -84,8 +84,8 @@ module EventCalendarRails
 
         def action_div(date,start,endt)
           cur_date = DateTime.parse(date.to_s + " 00:00:00 -0300")
-          start_time = DateTime.parse(date.to_s + " " + Time.at(start).strftime("%H:%M") + "-0300")
-          end_time = DateTime.parse(date.to_s + " " + Time.at(endt).strftime("%H:%M") + "-0300")
+          start_time = DateTime.parse(date.to_s + " " + Time.zone.at(start).strftime("%H:%M") + "-0300")
+          end_time = DateTime.parse(date.to_s + " " + Time.zone.at(endt).strftime("%H:%M") + "-0300")
           now = DateTime.parse DateTime.now.strftime("%Y-%m-%d %H:%M -0300")
 
           ar= [cur_date.to_i,
@@ -121,7 +121,7 @@ module EventCalendarRails
         end
 
         def footer_cell(day)
-          content_tag(:td, events.select{|i| i[0]==Time.parse(day.to_s).to_i}.map{|a| a[3].gsub("atendimento(s)","").to_i}.sum  , class: day_classes(day),:style=>"text-align:center")
+          content_tag(:td, events.select{|i| i[0]==Time.zone.parse(day.to_s).to_i}.map{|a| a[3].gsub("atendimento(s)","").to_i}.sum  , class: day_classes(day),:style=>"text-align:center")
         end
 
         def header
