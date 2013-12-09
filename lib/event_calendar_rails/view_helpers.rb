@@ -32,9 +32,9 @@ module EventCalendarRails
           nex  = mode=="month" ? date.next_month : date.next_week
 
           content_tag :div, id: "month" do
-             view.link_to("<", {date: prev}, {remote: true}) +
+             view.link_to("<", {date: Proc.new { prev }}, {remote: true}) +
              content_tag(:span, I18n.localize(date,:format =>"%B %Y")) +
-             view.link_to(">", {date: nex} , {remote: true})
+             view.link_to(">", {date: Proc.new { nex }} , {remote: true})
           end
         end
 
