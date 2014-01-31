@@ -39,6 +39,7 @@ module EventCalendarRails
         end
 
         def table
+          #binding.pry
           tb = content_tag :table, class: "table table-striped table-bordered" do
             header + week_rows + time_rows + (footer if display_mode==:admin)
           end
@@ -85,7 +86,7 @@ module EventCalendarRails
         def action_div(date,start,endt)
           cur_date = Time.zone.parse(date.to_s + " 00:00:00 -0300")
           start_time = Time.zone.parse(date.to_s + " " + Time.zone.at(start).strftime("%H:%M"))
-          end_time = DateTime.zone.parse(date.to_s + " " + Time.zone.at(endt).strftime("%H:%M"))
+          end_time = Time.zone.parse(date.to_s + " " + Time.zone.at(endt).strftime("%H:%M"))
           now = Time.zone.now.strftime("%Y-%m-%d %H:%M")
 
           ar= [cur_date.to_i,
@@ -125,7 +126,7 @@ module EventCalendarRails
         end
 
         def header
-          HEADER.unshift("") unless mode == "week_full"
+          HEADER.unshift("") unless mode == "week_full" || HEADER.size == 8
           content_tag :tr do
             HEADER.map { |day| content_tag :th, day,:style=>"width:12.5%" }.join.html_safe
           end
@@ -134,6 +135,7 @@ module EventCalendarRails
         def week_rows
           weeks.map do |week|
             content_tag :tr do
+              content_tag(:td,' ',:class=>'direita') +
               week.map { |day| day_cell(day) }.join.html_safe
             end
           end.join.html_safe
