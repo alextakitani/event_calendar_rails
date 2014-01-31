@@ -7,12 +7,12 @@ module EventCalendarRails
         Calendar.new(self, date, events, "month", nil, nil, nil, nil , display_mode=:regular, block).table
       end
 
-      def week_calendar(date = Date.today, events=nil, start_time = Time.parse("08:00"), end_time = Time.parse("19:30"), interval=30.minutes, precedence=1.hour,
+      def week_calendar(date = Date.today, events=nil, start_time = Time.zone.parse("08:00"), end_time = Time.zone.parse("19:30"), interval=30.minutes, precedence=1.hour,
         display_mode=:regular, &block)
         Calendar.new(self, date, events, "week", start_time, end_time, interval, precedence, display_mode, block ).table
       end
 
-      def week_calendar_admin(date = Date.today, events=nil, start_time = Time.parse("08:00"), end_time = Time.parse("19:30"), interval=30.minutes, precedence=1.hour, display_mode=:admin, &block)
+      def week_calendar_admin(date = Date.today, events=nil, start_time = Time.zone.parse("08:00"), end_time = Time.zone.parse("19:30"), interval=30.minutes, precedence=1.hour, display_mode=:admin, &block)
         Calendar.new(self, date, events, "week", start_time, end_time, interval, precedence, display_mode, block ).table
       end
 
@@ -83,10 +83,10 @@ module EventCalendarRails
         end
 
         def action_div(date,start,endt)
-          cur_date = DateTime.parse(date.to_s + " 00:00:00 -0300")
-          start_time = DateTime.parse(date.to_s + " " + Time.zone.at(start).strftime("%H:%M") + "-0300")
-          end_time = DateTime.parse(date.to_s + " " + Time.zone.at(endt).strftime("%H:%M") + "-0300")
-          now = DateTime.parse DateTime.now.strftime("%Y-%m-%d %H:%M -0300")
+          cur_date = Time.zone.parse(date.to_s + " 00:00:00 -0300")
+          start_time = Time.zone.parse(date.to_s + " " + Time.zone.at(start).strftime("%H:%M"))
+          end_time = DateTime.zone.parse(date.to_s + " " + Time.zone.at(endt).strftime("%H:%M"))
+          now = Time.zone.now.strftime("%Y-%m-%d %H:%M")
 
           ar= [cur_date.to_i,
                start_time.to_i,
