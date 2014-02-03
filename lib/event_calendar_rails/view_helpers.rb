@@ -84,7 +84,7 @@ module EventCalendarRails
         end
 
         def action_div(date,start,endt)
-          cur_date = Time.zone.parse(date.to_s + " 00:00:00 -0300")
+          cur_date = Time.zone.parse(date.to_s + " 00:00:00")
           start_time = Time.zone.parse(date.to_s + " " + Time.zone.at(start).strftime("%H:%M"))
           end_time = Time.zone.parse(date.to_s + " " + Time.zone.at(endt).strftime("%H:%M"))
           now = Time.zone.now.strftime("%Y-%m-%d %H:%M")
