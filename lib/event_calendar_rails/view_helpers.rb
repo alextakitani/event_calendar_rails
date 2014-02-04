@@ -87,7 +87,7 @@ module EventCalendarRails
           cur_date = Time.zone.parse(date.to_s + " 00:00:00")
           start_time = Time.zone.parse(date.to_s + " " + Time.zone.at(start).strftime("%H:%M"))
           end_time = Time.zone.parse(date.to_s + " " + Time.zone.at(endt).strftime("%H:%M"))
-          now = Time.zone.now.strftime("%Y-%m-%d %H:%M")
+          now = Time.zone.now
 
           ar= [cur_date.to_i,
                start_time.to_i,
@@ -96,7 +96,7 @@ module EventCalendarRails
           unless events.nil?
             if ev=events.find{|i| i[0..2]==ar}
 
-              if display_mode ==:admin || now + precedence < start_time
+              if display_mode ==:admin || now + precedence.seconds < start_time
                 content_tag(:div, ev.last, :class =>"livre label label-success verde",
                             :data=> {
                                       :date=>ar,
