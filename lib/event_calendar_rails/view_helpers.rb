@@ -133,9 +133,10 @@ module EventCalendarRails
         end
 
         def week_rows
+          #binding.pry
           weeks.map do |week|
             content_tag :tr do
-              content_tag(:td,' ',:class=>'direita') +
+              #content_tag(:td,' ',:class=>'direita') +
               week.map { |day| day_cell(day) }.join.html_safe
             end
           end.join.html_safe
